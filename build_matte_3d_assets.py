@@ -1,0 +1,514 @@
+import json
+
+matte_svgs = {}
+
+# Common defs for soft ambient shadows and matte diffuse lighting
+COMMON_DEFS = """
+  <defs>
+    <radialGradient id="ao" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(0,0,0,0.55)"/>
+      <stop offset="60%" stop-color="rgba(0,0,0,0.2)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </radialGradient>
+    <linearGradient id="goldMatte" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="50%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <linearGradient id="brassMatte" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="woodMatte" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9a3412"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+  </defs>
+"""
+
+# 1. 3D Matte Painted Green Cottage (House)
+matte_svgs['house_3d'] = f"""<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <!-- Soft Contact Shadow -->
+  <ellipse cx="30" cy="52" rx="24" ry="6" fill="url(#ao)"/>
+  <!-- Front Lawn Base -->
+  <polygon points="30,42 52,30 52,33 30,45 8,33 8,30" fill="#15803d"/>
+  <!-- Chimney with Smoke -->
+  <polygon points="38,12 44,15 44,24 38,21" fill="#b91c1c"/>
+  <polygon points="44,15 47,13 47,22 44,24" fill="#7f1d1d"/>
+  <polygon points="38,12 41,10 47,13 44,15" fill="#ef4444"/>
+  <circle cx="43" cy="8" r="2.5" fill="#e2e8f0" opacity="0.6"/>
+  <circle cx="46" cy="4" r="3.5" fill="#e2e8f0" opacity="0.4"/>
+  <!-- House Walls (Matte Ivory/Cream) -->
+  <polygon points="14,32 30,41 30,50 14,41" fill="#fdfbf7"/>
+  <polygon points="30,41 46,32 46,41 30,50" fill="#e2ded4"/>
+  <!-- Wooden Arched Door -->
+  <polygon points="20,38 26,41 26,48 20,44" fill="url(#woodMatte)"/>
+  <circle cx="21" cy="43" r="0.9" fill="#fbbf24"/>
+  <!-- Lit Window -->
+  <polygon points="35,36 41,33 41,39 35,42" fill="#38bdf8"/>
+  <line x1="38" y1="34" x2="38" y2="40" stroke="#ffffff" stroke-width="1"/>
+  <!-- Matte Sage/Pine Green Roof -->
+  <polygon points="30,14 10,26 14,32 30,22" fill="#10b981"/>
+  <polygon points="30,14 30,22 46,32 50,26" fill="#047857"/>
+  <polygon points="30,14 30,22 14,32 30,41 46,32 30,22" fill="#34d399"/>
+  <!-- Roof Ridge Line -->
+  <line x1="30" y1="14" x2="30" y2="22" stroke="#a7f3d0" stroke-width="1.8" stroke-linecap="round"/>
+</svg>"""
+
+# 2. 3D Matte Painted Skyscraper Hotel
+matte_svgs['hotel_3d'] = f"""<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <!-- Soft Contact Shadow -->
+  <ellipse cx="30" cy="54" rx="26" ry="6" fill="url(#ao)"/>
+  <!-- Tier 1 Base -->
+  <polygon points="12,32 30,42 30,52 12,42" fill="#dc2626"/>
+  <polygon points="30,42 48,32 48,42 30,52" fill="#991b1b"/>
+  <!-- Windows -->
+  <polygon points="16,36 21,39 21,42 16,39" fill="#fef08a"/>
+  <polygon points="23,40 28,43 28,46 23,43" fill="#fef08a"/>
+  <polygon points="32,41 37,38 37,41 32,44" fill="#fef08a"/>
+  <polygon points="39,37 44,34 44,37 39,40" fill="#fef08a"/>
+  <!-- Tier 2 Middle -->
+  <polygon points="16,20 30,28 30,38 16,30" fill="#ef4444"/>
+  <polygon points="30,28 44,20 44,30 30,38" fill="#b91c1c"/>
+  <polygon points="20,24 25,27 25,29 20,27" fill="#fef08a"/>
+  <polygon points="35,27 40,24 40,27 35,29" fill="#fef08a"/>
+  <!-- Tier 3 Penthouse -->
+  <polygon points="20,12 30,18 30,24 20,18" fill="#f87171"/>
+  <polygon points="30,18 40,12 40,18 30,24" fill="#dc2626"/>
+  <!-- Golden Crown Roof & Dome -->
+  <polygon points="30,8 20,12 30,18 40,12" fill="url(#goldMatte)"/>
+  <ellipse cx="30" cy="8" rx="6" ry="4" fill="url(#goldMatte)"/>
+  <line x1="30" y1="8" x2="30" y2="2" stroke="#fbbf24" stroke-width="2"/>
+  <circle cx="30" cy="2" r="1.5" fill="#fef08a"/>
+  <!-- Grand Brass Canopy Door -->
+  <polygon points="27,47 33,43 33,52 27,52" fill="url(#goldMatte)"/>
+</svg>"""
+
+# 3. 3D Figurine Token: Mr. Hazz (Mahogany & Brass Pedestal)
+matte_svgs['fig_mr_hazz'] = f"""<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <!-- Soft Ambient Shadow -->
+  <ellipse cx="40" cy="72" rx="32" ry="7" fill="url(#ao)"/>
+  <!-- Solid Polished Mahogany & Brass Pedestal -->
+  <path d="M14,62 C14,58 66,58 66,62 L66,69 C66,73 14,73 14,69 Z" fill="url(#woodMatte)"/>
+  <ellipse cx="40" cy="62" rx="26" ry="5.5" fill="url(#brassMatte)"/>
+  <ellipse cx="40" cy="62" rx="22" ry="4" fill="#451a03"/>
+  <!-- Heavy Felt Tarboosh Body -->
+  <path d="M22,60 L28,24 C28,22 52,22 52,24 L58,60 C58,63 22,63 22,60 Z" fill="#b91c1c"/>
+  <!-- Tarboosh Top -->
+  <ellipse cx="40" cy="24" rx="12" ry="3.5" fill="#dc2626"/>
+  <!-- Gold Button & Monocle -->
+  <circle cx="40" cy="24" r="3.5" fill="url(#brassMatte)"/>
+  <circle cx="48" cy="44" r="7" stroke="#fbbf24" stroke-width="2.5" fill="rgba(56,189,248,0.3)"/>
+  <line x1="55" y1="44" x2="60" y2="56" stroke="#fbbf24" stroke-width="1.8"/>
+  <!-- Matte Silk Black Tassel -->
+  <path d="M40,24 Q50,26 56,36 Q62,46 60,54" stroke="#18181b" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <polygon points="58,52 64,54 59,62 54,58" fill="#09090b"/>
+</svg>"""
+
+# 4. 3D Figurine Token: Queen Cleopatra (Lapis Lazuli & Gold Pedestal)
+matte_svgs['fig_cleopatra'] = f"""<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <!-- Soft Ambient Shadow -->
+  <ellipse cx="40" cy="72" rx="32" ry="7" fill="url(#ao)"/>
+  <!-- Solid Lapis Lazuli & Gold Pedestal -->
+  <path d="M14,62 C14,58 66,58 66,62 L66,69 C66,73 14,73 14,69 Z" fill="#1e3a8a"/>
+  <ellipse cx="40" cy="62" rx="26" ry="5.5" fill="url(#goldMatte)"/>
+  <ellipse cx="40" cy="62" rx="22" ry="4" fill="#0f172a"/>
+  <!-- Royal Nemes Wings (Matte Gold) -->
+  <path d="M18,58 L24,24 C24,14 56,14 56,24 L62,58 L50,60 L48,48 L32,48 L30,60 Z" fill="url(#goldMatte)"/>
+  <!-- Deep Blue Stripes -->
+  <line x1="26" y1="26" x2="54" y2="26" stroke="#1d4ed8" stroke-width="3"/>
+  <line x1="22" y1="33" x2="58" y2="33" stroke="#1d4ed8" stroke-width="3"/>
+  <line x1="20" y1="40" x2="60" y2="40" stroke="#1d4ed8" stroke-width="3"/>
+  <line x1="19" y1="47" x2="61" y2="47" stroke="#1d4ed8" stroke-width="3"/>
+  <!-- Royal Face -->
+  <ellipse cx="40" cy="35" rx="8" ry="10" fill="#fde68a"/>
+  <ellipse cx="36" cy="34" rx="2" ry="1.5" fill="#10b981"/>
+  <ellipse cx="44" cy="34" rx="2" ry="1.5" fill="#10b981"/>
+  <path d="M33,34 L39,34" stroke="#09090b" stroke-width="1.5"/>
+  <path d="M41,34 L47,34" stroke="#09090b" stroke-width="1.5"/>
+  <!-- Golden Cobra Crown -->
+  <path d="M40,22 C37,17 43,15 40,11" stroke="#ef4444" stroke-width="2.5" fill="none"/>
+  <circle cx="40" cy="11" r="2" fill="#fbbf24"/>
+  <polygon points="38,44 42,44 41,54 39,54" fill="#1d4ed8"/>
+</svg>"""
+
+# 5. Matte 3D Desert Oasis Villa (Brown - العريش / بورسعيد)
+matte_svgs['tile_oasis_villa'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <!-- Shadow -->
+  <ellipse cx="45" cy="78" rx="38" ry="9" fill="url(#ao)"/>
+  <!-- Sandstone Dune Base -->
+  <polygon points="45,46 16,62 45,74 74,62" fill="#dfc59b"/>
+  <!-- Date Palm Tree -->
+  <path d="M68,76 Q72,50 62,30" stroke="#78350f" stroke-width="4.5" fill="none"/>
+  <path d="M62,30 Q80,24 84,36" stroke="#15803d" stroke-width="3.5" fill="none"/>
+  <path d="M62,30 Q50,14 44,22" stroke="#15803d" stroke-width="3.5" fill="none"/>
+  <path d="M62,30 Q66,12 70,24" stroke="#15803d" stroke-width="3.5" fill="none"/>
+  <!-- Mud-brick Villa Body -->
+  <polygon points="18,48 45,60 45,76 18,64" fill="#f5e6ca"/>
+  <polygon points="45,60 70,48 70,64 45,76" fill="#cfb083"/>
+  <!-- Terracotta Hip Roof -->
+  <polygon points="45,36 14,52 45,62 76,52" fill="#c2410c"/>
+  <polygon points="45,36 45,62 76,52" fill="#9a3412"/>
+  <!-- Wooden Arched Door -->
+  <polygon points="26,60 36,64 36,73 26,69" fill="url(#woodMatte)"/>
+  <!-- Clay Urn -->
+  <ellipse cx="45,38" rx="3.5" ry="5" fill="#ea580c"/>
+</svg>"""
+
+# 6. Matte 3D Delta Mediterranean Townhouse (Light Blue - طنطا / شبين / المنصورة)
+matte_svgs['tile_delta_townhouse'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="78" rx="38" ry="9" fill="url(#ao)"/>
+  <!-- Townhouse Left Facade -->
+  <polygon points="20,40 45,52 45,76 20,64" fill="#f0f9ff"/>
+  <!-- Townhouse Right Facade -->
+  <polygon points="45,52 70,38 70,62 45,76" fill="#bae6fd"/>
+  <!-- Blue Tiled Roof -->
+  <polygon points="45,22 16,42 45,52 74,38" fill="#0284c7"/>
+  <polygon points="45,22 45,52 74,38" fill="#0369a1"/>
+  <!-- Mediterranean French Balconies -->
+  <rect x="25" y="48" width="10" height="12" fill="#0284c7" rx="1.5"/>
+  <rect x="52" y="46" width="12" height="12" fill="#0284c7" rx="1.5"/>
+  <line x1="23" y1="58" x2="37" y2="58" stroke="#ffffff" stroke-width="2"/>
+  <line x1="50" y1="56" x2="66" y2="56" stroke="#ffffff" stroke-width="2"/>
+  <!-- Chimney -->
+  <polygon points="54,20 59,18 59,28 54,30" fill="#b91c1c"/>
+</svg>"""
+
+# 7. Matte 3D Belle Époque Neoclassical Palace (Pink - دمنهور / كفر الشيخ / الزقازيق)
+matte_svgs['tile_neoclassic_palace'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="78" rx="38" ry="9" fill="url(#ao)"/>
+  <!-- Facade -->
+  <polygon points="18,40 45,52 45,76 18,64" fill="#fdf4ff"/>
+  <polygon points="45,52 72,38 72,62 45,76" fill="#f5d0fe"/>
+  <!-- Marble Columns -->
+  <line x1="24" y1="46" x2="24" y2="68" stroke="#ffffff" stroke-width="3"/>
+  <line x1="34" y1="50" x2="34" y2="72" stroke="#ffffff" stroke-width="3"/>
+  <line x1="52" y1="50" x2="52" y2="68" stroke="#ffffff" stroke-width="3"/>
+  <line x1="64" y1="44" x2="64" y2="62" stroke="#ffffff" stroke-width="3"/>
+  <!-- Gilded Rose Dome -->
+  <ellipse cx="45" cy="30" rx="16" ry="14" fill="#d946ef"/>
+  <circle cx="45" cy="16" r="2.5" fill="url(#brassMatte)"/>
+</svg>"""
+
+# 8. Matte 3D Historic Nile Manor with Waterwheel (Orange - بني سويف / الفيوم / المنيا)
+matte_svgs['tile_fayoum_waterwheel'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="78" rx="38" ry="9" fill="url(#ao)"/>
+  <!-- Nile Canal Basin -->
+  <path d="M8,72 Q45,64 82,72 L82,78 L8,78 Z" fill="#0284c7"/>
+  <!-- Stone Foundation -->
+  <polygon points="16,52 38,52 34,74 14,74" fill="#b45309"/>
+  <!-- Large 3D Wooden Waterwheel (ساقية الفيوم) -->
+  <circle cx="56" cy="50" r="22" stroke="url(#woodMatte)" stroke-width="5.5" fill="none"/>
+  <circle cx="56" cy="50" r="15" stroke="url(#woodMatte)" stroke-width="2.5" fill="none"/>
+  <circle cx="56" cy="50" r="5" fill="#451a03"/>
+  <!-- Spokes -->
+  <line x1="34" y1="50" x2="78" y2="50" stroke="#78350f" stroke-width="3"/>
+  <line x1="56" y1="28" x2="56" y2="72" stroke="#78350f" stroke-width="3"/>
+  <line x1="40" y1="34" x2="72" y2="66" stroke="#78350f" stroke-width="3"/>
+  <line x1="72" y1="34" x2="40" y2="66" stroke="#78350f" stroke-width="3"/>
+  <!-- Crystal Water Drops -->
+  <circle cx="64" cy="62" r="3" fill="#38bdf8"/>
+  <circle cx="70" cy="54" r="2.5" fill="#38bdf8"/>
+</svg>"""
+
+# 9. Matte 3D Upper Egypt Sandstone Citadel (Red - أسيوط / سوهاج / قنا)
+matte_svgs['tile_citadel'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="78" rx="40" ry="9" fill="url(#ao)"/>
+  <!-- Fortress Stone Wall -->
+  <polygon points="14,52 76,52 74,74 16,74" fill="#dfc59b"/>
+  <!-- Battlements -->
+  <rect x="18" y="47" width="7" height="6" fill="#b45309"/>
+  <rect x="30" y="47" width="7" height="6" fill="#b45309"/>
+  <rect x="53" y="47" width="7" height="6" fill="#b45309"/>
+  <rect x="65" y="47" width="7" height="6" fill="#b45309"/>
+  <!-- Main Silver Dome -->
+  <ellipse cx="45" cy="40" rx="16" ry="14" fill="#cbd5e1"/>
+  <circle cx="45" cy="26" r="2.5" fill="url(#brassMatte)"/>
+  <!-- Tall Slender Minarets -->
+  <line x1="24" y1="54" x2="24" y2="14" stroke="#f1f5f9" stroke-width="3.2"/>
+  <polygon points="21,14 27,14 24,7" fill="url(#brassMatte)"/>
+  <line x1="66" y1="54" x2="66" y2="14" stroke="#f1f5f9" stroke-width="3.2"/>
+  <polygon points="63,14 69,14 66,7" fill="url(#brassMatte)"/>
+</svg>"""
+
+# 10. Matte 3D Red Sea Luxury Resort (Yellow - الغردقة / شرم الشيخ / مرسى مطروح)
+matte_svgs['tile_redsea_resort'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="80" rx="40" ry="9" fill="url(#ao)"/>
+  <!-- Turquoise Pool -->
+  <ellipse cx="54" cy="68" rx="25" ry="10" fill="#0284c7"/>
+  <ellipse cx="54" cy="68" rx="20" ry="7" fill="#38bdf8"/>
+  <!-- Modern Cubist Beach Villa -->
+  <polygon points="14,42 40,54 40,74 14,62" fill="#ffffff"/>
+  <polygon points="40,54 62,42 62,62 40,74" fill="#cbd5e1"/>
+  <!-- Glass Sliding Patio -->
+  <polygon points="20,50 34,56 34,68 20,62" fill="#0284c7" opacity="0.8"/>
+  <!-- Sun Umbrella & Lounger -->
+  <polygon points="26,28 44,28 35,16" fill="#f59e0b"/>
+  <line x1="35" y1="28" x2="35" y2="42" stroke="#475569" stroke-width="2"/>
+</svg>"""
+
+# 11. Matte 3D Alexandria Royal Palace (Green - الأقصر / أسوان / الإسكندرية)
+matte_svgs['tile_alex_palace'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="78" rx="40" ry="9" fill="url(#ao)"/>
+  <!-- Palace Facade -->
+  <polygon points="16,42 45,54 45,76 16,64" fill="#ffffff"/>
+  <polygon points="45,54 74,42 74,64 45,76" fill="#94a3b8"/>
+  <!-- Emerald Domes -->
+  <ellipse cx="30" cy="35" rx="10" ry="11" fill="#047857"/>
+  <circle cx="30" cy="24" r="2" fill="url(#brassMatte)"/>
+  <ellipse cx="60" cy="35" rx="10" ry="11" fill="#047857"/>
+  <circle cx="60" cy="24" r="2" fill="url(#brassMatte)"/>
+  <!-- Center Tower & Gold Spire -->
+  <polygon points="38,24 52,24 50,52 40,52" fill="#f8fafc"/>
+  <polygon points="36,24 54,24 45,8" fill="#10b981"/>
+  <circle cx="45" cy="8" r="2.5" fill="url(#brassMatte)"/>
+</svg>"""
+
+# 12. Matte 3D Great Pyramids & Sphinx (Giza - الجيزة 37)
+matte_svgs['tile_pyramid'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="78" rx="40" ry="9" fill="url(#ao)"/>
+  <!-- Sand Dune Horizon -->
+  <path d="M6,76 Q26,62 52,74 Q72,60 86,76 Z" fill="#b45309" opacity="0.6"/>
+  <!-- Khufu Great Pyramid -->
+  <polygon points="42,20 14,70 42,76" fill="#f5e6ca"/>
+  <polygon points="42,20 42,76 74,66" fill="#cfb083"/>
+  <!-- Golden Capstone -->
+  <polygon points="42,20 36,31 42,32" fill="url(#goldMatte)"/>
+  <polygon points="42,20 42,32 50,30" fill="#d97706"/>
+  <!-- Second Pyramid -->
+  <polygon points="62,32 46,64 62,66" fill="#f5e6ca" opacity="0.85"/>
+  <polygon points="62,32 62,66 82,60" fill="#9a7a4f" opacity="0.85"/>
+  <!-- Sphinx Statue -->
+  <ellipse cx="28" cy="72" rx="9" ry="4.5" fill="#92400e"/>
+  <circle cx="23" cy="67" r="3.5" fill="#fde68a"/>
+</svg>"""
+
+# 13. Matte 3D Cairo Tower & Skyline (Cairo - القاهرة 39)
+matte_svgs['tile_cairo_tower'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="82" rx="36" ry="7" fill="url(#ao)"/>
+  <!-- Nile River Stream -->
+  <path d="M10,80 Q45,74 80,80 L78,85 Q45,79 12,85 Z" fill="#0284c7"/>
+  <!-- Tower Base (Lotus) -->
+  <polygon points="36,78 54,78 51,70 39,70" fill="#475569"/>
+  <!-- Shaft with Wicker Lattice -->
+  <polygon points="40,70 50,70 48,26 42,26" fill="#e2e8f0"/>
+  <line x1="40" y1="70" x2="48" y2="26" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="50" y1="70" x2="42" y2="26" stroke="#94a3b8" stroke-width="1"/>
+  <!-- Revolving Restaurant Pod -->
+  <ellipse cx="45" cy="24" rx="9" ry="4.5" fill="url(#brassMatte)"/>
+  <rect x="38" y="21" width="14" height="4.5" fill="#d97706" rx="1.5"/>
+  <!-- Spire & Red Beacon -->
+  <line x1="45" y1="20" x2="45" y2="7" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="45" cy="7" r="2.5" fill="#ef4444"/>
+</svg>"""
+
+# 14. Matte 3D Steam Locomotive Engine (Stations - محطات القطار)
+matte_svgs['tile_train'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="80" rx="38" ry="8" fill="url(#ao)"/>
+  <!-- Railroad Tracks -->
+  <line x1="8" y1="78" x2="82" y2="78" stroke="#475569" stroke-width="4.5"/>
+  <!-- Steam Puffs -->
+  <circle cx="32" cy="18" r="7" fill="#f8fafc" opacity="0.8"/>
+  <circle cx="25" cy="12" r="9" fill="#f8fafc" opacity="0.6"/>
+  <circle cx="16" cy="8" r="11" fill="#f8fafc" opacity="0.4"/>
+  <!-- Locomotive Cab -->
+  <polygon points="52,32 76,32 76,68 52,68" fill="#b91c1c"/>
+  <rect x="58" y="38" width="12" height="12" fill="#38bdf8" rx="2"/>
+  <!-- Boiler Body -->
+  <path d="M24,42 L52,42 L52,68 L24,68 C18,68 18,42 24,42 Z" fill="url(#brassMatte)"/>
+  <!-- Smokestack Chimney -->
+  <polygon points="28,26 36,26 34,42 30,42" fill="#0f172a"/>
+  <!-- Cowcatcher Wedge -->
+  <polygon points="12,70 22,62 22,70" fill="#ef4444"/>
+  <!-- Big Wheels -->
+  <circle cx="32" cy="70" r="8" fill="#0f172a" stroke="#d97706" stroke-width="2.5"/>
+  <circle cx="50" cy="70" r="8" fill="#0f172a" stroke="#d97706" stroke-width="2.5"/>
+  <circle cx="68" cy="70" r="8" fill="#0f172a" stroke="#d97706" stroke-width="2.5"/>
+</svg>"""
+
+# 15. Matte 3D Electric Transformer Turbine (Electricity Utility)
+matte_svgs['tile_electric'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="80" rx="34" ry="7" fill="url(#ao)"/>
+  <!-- Generator Base -->
+  <polygon points="22,76 68,76 62,54 28,54" fill="#334155"/>
+  <!-- Insulator Coils -->
+  <ellipse cx="45" cy="50" rx="16" ry="6" fill="#cbd5e1"/>
+  <ellipse cx="45" cy="42" rx="14" ry="5.5" fill="#94a3b8"/>
+  <ellipse cx="45" cy="34" rx="12" ry="5" fill="#64748b"/>
+  <!-- Sculpted 3D Lightning Bolt -->
+  <polygon points="52,8 26,42 42,42 36,72 64,36 48,36" fill="url(#goldMatte)"/>
+</svg>"""
+
+# 16. Matte 3D Nile Water Hydrant & Fountain (Water Utility)
+matte_svgs['tile_water'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="80" rx="34" ry="7" fill="url(#ao)"/>
+  <!-- Splashing Water Droplets -->
+  <path d="M45,12 C45,12 26,36 26,48 C26,58 34,66 45,66 C56,66 64,58 64,48 C64,36 45,12 45,12 Z" fill="#0284c7"/>
+  <ellipse cx="41" cy="42" rx="4.5" ry="9" fill="#7dd3fc" opacity="0.8" transform="rotate(-20 41 42)"/>
+  <ellipse cx="45" cy="74" rx="26" ry="5" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+  <circle cx="20" cy="38" r="4" fill="#38bdf8"/>
+  <circle cx="70" cy="34" r="5" fill="#38bdf8"/>
+</svg>"""
+
+# 17. Matte 3D Carved Wooden Treasure Chest (صندوق الدنيا 2, 17, 33)
+matte_svgs['tile_chest'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="78" rx="36" ry="8" fill="url(#ao)"/>
+  <!-- Chest Body (Oak & Brass) -->
+  <polygon points="18,44 72,44 68,74 22,74" fill="url(#woodMatte)"/>
+  <rect x="20" y="48" width="50" height="5" fill="url(#brassMatte)"/>
+  <rect x="22" y="64" width="46" height="5" fill="url(#brassMatte)"/>
+  <!-- Curved Lid -->
+  <polygon points="14,28 76,28 72,44 18,44" fill="url(#woodMatte)"/>
+  <ellipse cx="45" cy="28" rx="31" ry="7" fill="#b45309"/>
+  <!-- Gold Coins & Rubies Bursting -->
+  <circle cx="38" cy="38" r="7" fill="url(#goldMatte)"/>
+  <circle cx="50" cy="36" r="8" fill="url(#goldMatte)"/>
+  <circle cx="31" cy="43" r="6" fill="url(#goldMatte)"/>
+  <circle cx="59" cy="41" r="7" fill="url(#goldMatte)"/>
+  <polygon points="45,32 50,37 45,42 40,37" fill="#ef4444"/>
+  <!-- Brass Clasp -->
+  <rect x="42" y="44" width="6" height="9" fill="url(#brassMatte)" rx="1.5"/>
+</svg>"""
+
+# 18. Matte 3D Carved Mystery Question Cube (كروت الحظ 7, 22, 36)
+matte_svgs['tile_chance'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="80" rx="30" ry="7" fill="url(#ao)"/>
+  <!-- 3D Question Cube (Matte Rose Gold) -->
+  <polygon points="45,18 74,34 45,50 16,34" fill="#f472b6"/>
+  <polygon points="16,34 45,50 45,76 16,60" fill="#db2777"/>
+  <polygon points="45,50 74,34 74,60 45,76" fill="#be185d"/>
+  <!-- Deep Inset Question Mark -->
+  <text x="45" y="45" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="sans-serif">?</text>
+  <!-- Inlaid Gold Corners -->
+  <polygon points="20,20 22,24 26,24 23,27 24,31 20,28 16,31 17,27 14,24 18,24" fill="url(#brassMatte)"/>
+  <polygon points="70,24 72,27 75,27 73,29 74,32 71,30 68,32 69,29 67,27 70,27" fill="url(#brassMatte)"/>
+</svg>"""
+
+# 19. Matte 3D Wrought-Iron Dungeon Tower (سجن القلعة 10)
+matte_svgs['tile_jail'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="80" rx="36" ry="8" fill="url(#ao)"/>
+  <!-- Stone Wall Frame -->
+  <rect x="14" y="18" width="62" height="58" fill="#475569" rx="5"/>
+  <rect x="20" y="24" width="50" height="46" fill="#09090b" rx="3"/>
+  <!-- Heavy Iron Bars -->
+  <line x1="29" y1="24" x2="29" y2="70" stroke="#94a3b8" stroke-width="3.5"/>
+  <line x1="39" y1="24" x2="39" y2="70" stroke="#94a3b8" stroke-width="3.5"/>
+  <line x1="51" y1="24" x2="51" y2="70" stroke="#94a3b8" stroke-width="3.5"/>
+  <line x1="61" y1="24" x2="61" y2="70" stroke="#94a3b8" stroke-width="3.5"/>
+  <line x1="20" y1="46" x2="70" y2="46" stroke="#64748b" stroke-width="2.5"/>
+  <!-- Heavy Brass Padlock -->
+  <path d="M41,52 C41,47 49,47 49,52 L49,57 L41,57 Z" stroke="#fbbf24" stroke-width="3" fill="none"/>
+  <rect x="37" y="56" width="16" height="12" fill="url(#brassMatte)" rx="2.5"/>
+  <circle cx="45" cy="62" r="1.8" fill="#09090b"/>
+</svg>"""
+
+# 20. Matte 3D Vintage Die-Cast Convertible Car (الاستراحة المجانية 20)
+matte_svgs['tile_parking'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="80" rx="40" ry="8" fill="url(#ao)"/>
+  <!-- Road/Curb Pedestal -->
+  <path d="M12,68 C16,58 26,56 35,56 L55,56 C64,56 68,60 74,68 Z" fill="#b91c1c"/>
+  <!-- White-Wall Wheels -->
+  <circle cx="23" cy="72" r="7" fill="#09090b"/>
+  <circle cx="23" cy="72" r="3.5" fill="#f8fafc"/>
+  <circle cx="58" cy="72" r="7" fill="#09090b"/>
+  <circle cx="58" cy="72" r="3.5" fill="#f8fafc"/>
+  <!-- Windshield -->
+  <polygon points="38,56 43,44 52,44 54,56" fill="#38bdf8" opacity="0.85"/>
+  <!-- Large Enamel 'P' Badge -->
+  <circle cx="30" cy="28" r="14" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.5"/>
+  <text x="30" y="35" font-size="18" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="sans-serif">P</text>
+  <!-- Jackpot Coin Pot -->
+  <ellipse cx="64" cy="40" rx="10" ry="8" fill="url(#brassMatte)"/>
+  <circle cx="62" cy="34" r="3" fill="#fef08a"/>
+  <circle cx="66" cy="34" r="3.5" fill="#fef08a"/>
+</svg>"""
+
+# 21. Matte 3D Police Whistle, Siren & Handcuffs (ادخل السجن 30)
+matte_svgs['tile_gotojail'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="78" rx="36" ry="8" fill="url(#ao)"/>
+  <!-- Base -->
+  <polygon points="28,74 62,74 56,52 34,52" fill="#334155"/>
+  <!-- Siren Dome -->
+  <path d="M34,52 C34,34 56,34 56,52 Z" fill="#dc2626"/>
+  <!-- Siren Beams -->
+  <line x1="45" y1="32" x2="45" y2="16" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="32" y1="36" x2="18" y2="24" stroke="#3b82f6" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="58" y1="36" x2="72" y2="24" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Handcuffs -->
+  <circle cx="30" cy="66" r="7" stroke="#cbd5e1" stroke-width="3" fill="none"/>
+  <circle cx="50" cy="66" r="7" stroke="#cbd5e1" stroke-width="3" fill="none"/>
+  <line x1="37" y1="66" x2="43" y2="66" stroke="#cbd5e1" stroke-width="3.5"/>
+</svg>"""
+
+# 22. Matte 3D Golden Speed Arrow & Rocket (انطلق 0)
+matte_svgs['tile_go'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="78" rx="36" ry="9" fill="url(#ao)"/>
+  <!-- Speed Thruster Flame -->
+  <polygon points="38,56 45,82 52,56" fill="#f97316"/>
+  <polygon points="40,56 45,74 50,56" fill="#fde047"/>
+  <!-- Golden Sculpted Arrow -->
+  <path d="M45,10 L66,44 L54,44 L54,62 L36,62 L36,44 L24,44 Z" fill="url(#brassMatte)"/>
+  <path d="M45,15 L60,44 L50,44 L50,60 L40,60 L40,44 L30,44 Z" fill="#fef08a"/>
+  <!-- Gold Coins Bursting -->
+  <circle cx="22" cy="34" r="8" fill="url(#goldMatte)"/>
+  <circle cx="68" cy="40" r="10" fill="url(#goldMatte)"/>
+</svg>"""
+
+# 23. Matte 3D Banker's Leather Money Sack & Ingot (الضرائب 4, 38)
+matte_svgs['tile_tax'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="80" rx="36" ry="8" fill="url(#ao)"/>
+  <!-- Leather Sack Body -->
+  <path d="M25,76 C16,62 20,42 34,39 C34,34 40,26 45,26 C50,26 56,34 56,39 C70,42 74,62 65,76 Z" fill="url(#woodMatte)"/>
+  <!-- Rope Tie -->
+  <ellipse cx="45" cy="39" rx="11" ry="3.5" fill="#f59e0b"/>
+  <!-- Golden Egyptian Pound Medallion -->
+  <circle cx="45" cy="58" r="11" fill="url(#brassMatte)"/>
+  <text x="45" y="63" font-size="12" font-weight="900" fill="#451a03" text-anchor="middle" font-family="sans-serif">ج.م</text>
+</svg>"""
+
+# 24. Matte 3D Alexandria Lighthouse (منارة الإسكندرية 3)
+matte_svgs['tile_lighthouse'] = f"""<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  {COMMON_DEFS}
+  <ellipse cx="45" cy="82" rx="38" ry="8" fill="url(#ao)"/>
+  <!-- Mediterranean Sea Waves -->
+  <path d="M6,76 Q25,68 45,76 Q65,68 84,76 L84,85 L6,85 Z" fill="#0284c7"/>
+  <!-- Stone Jetty -->
+  <polygon points="30,78 60,78 56,68 34,68" fill="#64748b"/>
+  <!-- Tower Base -->
+  <polygon points="36,68 54,68 52,46 38,46" fill="#f8fafc"/>
+  <!-- Octagonal Middle Tier -->
+  <polygon points="39,46 51,46 50,28 40,28" fill="#e2e8f0"/>
+  <!-- Lantern Chamber & Beam -->
+  <rect x="41" y="18" width="8" height="10" fill="#fbbf24"/>
+  <polygon points="45,23 88,8 84,40" fill="#fef08a" opacity="0.4"/>
+  <polygon points="45,23 2,8 6,40" fill="#fef08a" opacity="0.4"/>
+  <circle cx="45" cy="23" r="4" fill="#ffffff"/>
+</svg>"""
+
+with open("matte_3d_assets.json", "w", encoding="utf-8") as f:
+    json.dump(matte_svgs, f, ensure_ascii=False)
+
+print(f"Generated {len(matte_svgs)} matte 3D sculptural assets successfully!")
